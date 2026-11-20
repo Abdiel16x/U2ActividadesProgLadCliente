@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Ejercicio 6 Calculadora</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial;
+            color: white;
+            background-color: #0e0e0e;
+        }
+
+        h1 {
+            font-size: 1em;
+            height: 4em;
+            align-content: center;
+            text-align: center;
+            background-color: gray;
+            color: black;
+            margin: 10px;
+        }
+
+        section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            width: 400px;
+            margin: auto;
+            border: 5px solid darkgray;
+            border-radius: 1em;
+            gap: 1px;
+        }
+
+        label {
+            grid-column: span 4;
+            text-align: center;
+            font-size: 3em;
+        }
+
+        input {
+            border: 0;
+            padding: 20px;
+            background-color: #3d3d3d;
+            color: white;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="button" class="btnReiniciar" value="R" />
+    <h1>Ejercicio 6. Calculadora</h1>
+
+    <section class="keypad">
+        <label id="screen">0</label>
+
+        <input type="button" value="7" />
+        <input type="button" value="8" />
+        <input type="button" value="9" />
+        <input type="button" value="+" />
+
+        <input type="button" value="4" />
+        <input type="button" value="5" />
+        <input type="button" value="6" />
+        <input type="button" value="-" />
+
+        <input type="button" value="1" />
+        <input type="button" value="2" />
+        <input type="button" value="3" />
+        <input type="button" value="X" />
+
+        <input type="button" value="0" />
+        <input type="button" value="C" />
+        <input type="button" value="=" />
+    </section>
+
+    <script>
+        // Variables que almacenan el botón seleccionado,
+        // los dos números y el operador matemático.
+        let botonSeleccionado = null;
+        let numero1 = "";
+        let numero2 = "";
+        let operador = "";
+
+        // Se obtienen los elementos HTML que se utilizarán
+        // para reiniciar la calculadora, detectar los clics
+        // y mostrar los números y resultados.
+        const btnReiniciar = document.querySelector(".btnReiniciar");
+        const keypad = document.querySelector(".keypad");
+        const screen = document.querySelector("#screen");
+
+        // Método que concatena los dígitos seleccionados
+        // para formar el primer número o el segundo número,
+        // dependiendo de si ya se seleccionó un operador.
+        function concatenar(numero) {
+            if (operador == "") {
+                numero1 = numero1 + numero;
+                screen.textContent = numero1;
+            }
+
+            if (operador != "") {
+                numero2 = numero2 + numero;
+                screen.textContent = numero2;
+            }
+        }
+
+        // Método que realiza la operación matemática
+        // de acuerdo con el operador seleccionado.
+        function calcular() {
+            let resultado = 0;
+
+            if (operador == "+") {
+                resultado = Number(numero1) + Number(numero2);
+            }
+
+            if (operador == "-") {
+                resultado = Number(numero1) - Number(numero2);
+            }
+
+            if (operador == "X") {
+                resultado = Number(numero1) * Number(numero2);
+            }
+
+            // Se muestra el resultado en la pantalla.
+            screen.textContent = resultado;
+
+            // El resultado se guarda como el primer número
+            // para permitir continuar realizando operaciones.
+            numero1 = resultado.toString();
+            numero2 = "";
+            operador = "";
+        }
+
+        // Se agrega un evento de clic al contenedor de botones.
+        // El parámetro e permite acceder al evento y al elemento
+        // HTML específico sobre el que se hizo clic.
+        keypad.addEventListener("click", (e) => {
+
+            // Se guarda el botón seleccionado.
+            botonSeleccionado = e.target;
+
+            // Se verifica que el elemento seleccionado sea un input.
+            if (e.target.tagName == "INPUT") {
+
+                // Si se selecciona un dígito del 0 al 9,
+                // se llama al método concatenar para agregarlo
+                // al número que se está escribiendo.
+                if (e.target.value >= "0" && e.target.value <= "9") {
+                    concatenar(e.target.value);
+                }
+
+                // Si se selecciona un operador matemático,
+                // se guarda en la variable operador,
+                // siempre que ya exista un primer número.
+                if (e.target.value == "+" || e.target.value == "-" || e.target.value == "X") {
+                    if (numero1 != "") {
+                        operador = e.target.value;
+                    }
+                }
+
+                // Si se presiona el botón igual,
+                // se verifica que existan los dos números
+                // y un operador antes de calcular.
+                if (e.target.value == "=") {
+                    if (numero1 != "" && numero2 != "" && operador != "") {
+                        calcular();
+                    }
+                }
+
+                // Si se presiona C, se limpian las variables
+                // y se restablece la pantalla a cero.
+                if (e.target.value == "C") {
+                    numero1 = "";
+                    numero2 = "";
+                    operador = "";
+                    screen.textContent = "0";
+                }
+
+                // Se cambia el color y el tamaño de la letra
+                // del botón seleccionado para resaltarlo.
+                botonSeleccionado.style.backgroundColor = "#670096";
+                botonSeleccionado.style.fontSize = "30px";
+            }
+        });
+
+        // Evento del botón R para reiniciar la calculadora.
+        btnReiniciar.addEventListener("click", () => {
+
+            // Se limpian los números y el operador.
+            numero1 = "";
+            numero2 = "";
+            operador = "";
+
+            // Se restablece la pantalla a cero.
+            screen.textContent = "0";
+
+            // Se obtienen todos los botones de la calculadora.
+            const botones = keypad.querySelectorAll("input");
+
+            // Se restauran el color y el tamaño originales
+            // de todos los botones.
+            botones.forEach(boton => {
+                boton.style.backgroundColor = "#3d3d3d";
+                boton.style.fontSize = "1.5em";
+            });
+
+            // Se elimina la referencia al botón seleccionado.
+            botonSeleccionado = null;
+        });
+    </script>
+</body>
+
+</html>

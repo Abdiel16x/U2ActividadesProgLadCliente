@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil</title>
+
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 50px;
+            text-align: center;
+            transition: background 0.5s;
+        }
+
+        .caja {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body id="cuerpo">
+
+    <div class="caja">
+        <h1 id="saludo">Cargando...</h1>
+
+        <p>¡Qué bueno verte de nuevo!</p>
+
+        <button id="btnSalir">Cerrar Sesión (Borrar datos)</button>
+    </div>
+
+    <script>
+        const cuerpo = document.getElementById("cuerpo");
+        const saludo = document.getElementById("saludo");
+        const btnSalir = document.getElementById("btnSalir");
+
+        const nombre = localStorage.getItem("nombreUsuario");
+        const color = localStorage.getItem("colorUsuario");
+
+        if (nombre && color) {
+            saludo.textContent(`Bienvenido ${nombre}`);
+            cuerpo.style.background = color;
+        }
+
+        btnSalir.addEventListener{
+             
+        }
+    </script>
+    
+
+</body>
+</html>

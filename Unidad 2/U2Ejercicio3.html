@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 3. Adivina número</title>
+    <style>
+        body,
+        html {
+            width: 100%;
+            font-family: Verdana;
+            margin: 0;
+            padding: 20px;
+            background-color: gainsboro;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            background-color: seagreen;
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            margin: 0 0 20px 0;
+            border-radius: 4px;
+            font-size: 1.8rem;
+        }
+
+        .juego {
+            background-color: white;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .between {
+            color: seagreen;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .numero {
+            background-color: gainsboro;
+            color: seagreen;
+            font-size: 3rem;
+            font-weight: bold;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            margin: 0 auto 20px auto;
+            border: 2px solid #ccc;
+        }
+
+        .controles {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .left,
+        .right {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .numeroAdivinar {
+            padding: 10px;
+            font-size: 1.2rem;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            font-family: Arial;
+        }
+
+        .numeroAdivinar:focus {
+            border-color: seagreen;
+        }
+
+        .btn {
+            background-color: seagreen;
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: Arial;
+            transition: background-color 0.2s;
+        }
+
+        .check {
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            background-color: seagreen;
+        }
+
+        .check:hover {
+            background-color: #2e8b57;
+        }
+
+        .again {
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            background-color: #555;
+        }
+
+        .again:hover {
+            background-color: #333;
+        }
+
+        .mensaje {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-height: 24px;
+            color: seagreen;
+        }
+
+        .label-score,
+        .label-highscore {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .score,
+        .highscore {
+            color: #333;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Ejercicio 3. Juego adivinar número.</h1>
+    <div class="juego">
+        <header><button class="btn again">Otra vez a jugar!</button>
+            <p class="between">(Un número entre 1 y 20)</p>
+        </header>
+        <div class="numero">?</div>
+        <div class="controles">
+            <div class="left"><input type="number" class="numeroAdivinar" placeholder="Escribe un número..." /><button
+                    class="btn check">Adivinar</button></div>
+            <div class="right">
+                <p class="mensaje">Juego iniciado...</p>
+                <p class="label-score">💯 Record: <span class="score">20</span></p>
+                <p class="label-highscore">🥇 Máximo record: <span class="highscore">0</span></p>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    //global numero aleatorio
+    let numAleatorio;
+    //record
+    let record;
+    let nuevoRecord = 0;
+    function JugarOtraVez() {
+        //generar un numero aleatorio
+        numAleatorio = Math.floor(Math.random() * 20) + 1;
+
+        //colocar el signo de interrogacion
+        numero.textContent = "?";
+
+        //colocar record = 20
+        record = 20;
+        //activar el boton de adivinar
+        btnCheck.disabled = false;
+        //desactivar el boton de again
+        btnAgain.disabled = true;
+        //mensaje de juego iniciado
+        mensaje.textContent = "Juego Iniciado."
+        //colocar " " a numero
+        numeroAdivinar.value = "";
+        //reflejar el record
+        score.textContent = record;
+
+    }
+    const btnAgain = document.querySelector(".btn.again");
+    const btnCheck = document.querySelector(".btn.check");
+    const numero = document.querySelector(".numero");
+    const numeroAdivinar = document.querySelector(".numeroAdivinar");
+    const mensaje = document.querySelector(".mensaje");
+    const score = document.querySelector(".score");
+    const highscore = document.querySelector(".highscore");
+
+    btnCheck.addEventListener("click", () => {
+        //convertir el numero a number
+        const intento = Number(numeroAdivinar.value);
+        //preguntar si no es un numero y si no esta en el rango de 1-20
+        if (numeroAdivinar.value === "") {
+            mensaje.textContent = "El input esta vacio.";
+        }
+        else if (intento < 1 || intento > 20) {
+            mensaje.textContent = "Solo se aceptan numeros en el rango 1-20.";
+        }
+        else if (intento === numAleatorio) {
+            mensaje.textContent = "Adivinaste el numero";
+            btnCheck.disabled = true;
+            btnAgain.disabled = false;
+            numero.textContent = numAleatorio;
+
+            if (record > nuevoRecord) {
+                nuevoRecord = record;
+                highscore.textContent = nuevoRecord;
+            }
+        }
+        //decrementamos a record
+        else {
+            record--;
+            score.textContent = record;
+
+            //record >0
+            if (record > 0) {
+                numeroAdivinar.value = "";
+            }
+            else {
+                btnCheck.disabled = true;
+                btnAgain.disabled = false;
+                mensaje.textContent = "Perdiste."
+            }
+        }
+
+    })
+    btnAgain.addEventListener("click", JugarOtraVez);
+    btnAgain.disabled = true;
+    btnCheck.disabled = true;
+
+    JugarOtraVez();
+
+    //se toma el objeto, propiedad
+
+    //const var = document.querySelector(".btn.check")
+</script>
+
+</html>

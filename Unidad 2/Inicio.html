@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión</title>
+
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f0f2f5;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .caja {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #1750d8;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="caja">
+        <h2>Configura tu perfil</h2>
+
+        <input type="text" id="inputNombre" placeholder="¿Cómo te llamas?">
+
+        <select id="selectColor">
+            <option value="#1750d8">Azul</option>
+            <option value="#2e8b57">Verde</option>
+            <option value="#c7365f">Rosa</option>
+            <option value="#f1c40f">Amarillo</option>
+        </select>
+
+        <button id="btnEntrar">Entrar a mi perfil</button>
+    </div>
+
+    <script>
+        const inputNombre = document.getElementById("inputNombre");
+        const selectColor = document.getElementById("selectColor");
+        const btnEntrar = document.getElementById("btnEntrar");
+        const nombre = localStorage.setItem("nombreUsuario");
+        localStorage.setItem("color", selectColor.value);
+
+    </script>
+
+</body>
+
+</html>

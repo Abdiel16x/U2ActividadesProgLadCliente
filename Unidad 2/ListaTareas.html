@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+ 
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>Mis Tareas</title>
+<style>
+        body {
+            font-family: sans-serif;
+            background: #f4f6f9;
+            padding: 20px;
+        }
+ 
+        .contenedor {
+            background: white;
+            padding: 20px;
+            max-width: 400px;
+            margin: auto;
+            border-radius: 8px;
+        }
+ 
+        input, button {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+ 
+        button {
+            background: #1750d8;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+ 
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+ 
+        li {
+            background: #eee;
+            padding: 10px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+ 
+        .btn-detalles {
+            background: #2e8b57;
+            width: auto;
+            margin: 0;
+            padding: 5px 10px;
+        }
+</style>
+</head>
+<body>
+<div class="contenedor">
+<h2>Mis Tareas</h2>
+<input type="text" id="inputTarea" placeholder="Nueva tarea...">
+
+<button id="btnAgregar">Añadir</button>
+ 
+        <a href="detalle.html" style="display:block; text-align:center; margin-top:20px; color:#1750d8;">Ver Detalles de las Tareas </a>
+        <ul id="listaTareas"></ul>
+
+        <script>
+            //Obtener el archivo listaTareas ubicado en el almacenamiento local
+
+            //leer la lista tareas del local storage
+            //crear el arreglo
+            //filtrar por: completadas-incompletas-TODAS
+            let listaTareas= JSON.parse(localStorage.getItem("listaTareas")) || [];
+            const listaHTML = document.getElementById("listaTareas");
+            const btnAgregar = document.getElementById("btnAgregar");
+            const texto = document.getElementById("inputTarea");
+
+            btnAgregar.addEventListener("click", ()=>{
+                let contenido = text.value;
+                if (contenido=="") {
+                    return
+                }
+                listaTareas.push({
+                    "nombre":contenido,
+                    "completado":false
+                });
+                texto.value = "";
+                localStorage.setItem("listaTareas", JSON.stringify(listaTareas));
+                renderizarHTML();
+            })
+
+            const MarcarTarea =(indice)=>{
+                listaTareas[indice].completado=!listaTareas[indice].completado;
+                localStorage.setItem("listaTareas", JSON.stringify(listaTareas));
+                renderizarHTML();
+            }
+
+            const renderizarHTML =()=>{
+                listaHTML.innerHTML = "";
+                // leer la informacion de la lista
+                listaTareas.forEach((t,indice) => {
+                    //dibujar el Li
+                    const liHTML = document.createElement("li");
+                    const spanHTML = document.createElement("span");
+                    const buttonHTML = document.createElement("button");
+                    spanHTML.textContent = t.nombre;
+                    spanHTML.style.color=t.completado?'green':'black';
+                    buttonHTML.textContent=t.completado?'/':'X';
+                    buttonHTML.addEventListener("click",()=> MarcarTarea(indice));
+                    liHTML.append(spanHTML);
+                    li.append(buttonHTML);
+                    listaHTML.append(liHTML);
+                });
+            }
+
+            renderizarHTML();
+        </script>
+</div>

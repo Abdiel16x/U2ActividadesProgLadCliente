@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego Craps</title>
+
+    <style>
+        body,
+        html {
+            width: 100%;
+            font-family: Verdana;
+            margin: 0;
+            padding: 20px;
+            background-color: gainsboro;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            background-color: #660080;
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            margin: 0 0 20px 0;
+            border-radius: 4px;
+            font-size: 1.8rem;
+        }
+
+        .juego {
+            background-color: white;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .dados {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .dado {
+            background-color: gainsboro;
+            color: #660080;
+            font-size: 3rem;
+            font-weight: bold;
+            width: 80px;
+            height: 80px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 5px;
+            border: 2px solid #ccc;
+        }
+
+        .controles {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .left,
+        .right {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: #660080;
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: Arial;
+        }
+
+        .lanzar {
+            padding: 10px 20px;
+        }
+
+        .lanzar:hover {
+            background-color: #b15bc7;
+        }
+
+        .again {
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            background-color: #555;
+        }
+
+        .again:hover {
+            background-color: #333;
+        }
+
+        .mensaje {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-height: 24px;
+            color: #660080;
+        }
+
+        .dato {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .valor {
+            color: #333;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Juego de Craps</h1>
+
+    <div class="juego">
+
+        <header>
+            <button class="btn again">Nueva partida</button>
+        </header>
+
+        <div class="dados">
+            <div class="dado dado1">?</div>
+            <div class="dado dado2">?</div>
+        </div>
+
+        <div class="controles">
+
+            <div class="left">
+                <button class="btn lanzar">
+                    Lanzar dados
+                </button>
+            </div>
+
+            <div class="right">
+
+                <p class="mensaje">
+                    Juego iniciado
+                </p>
+
+                <p class="dato">
+                    Suma:
+                    <span class="valor suma">0</span>
+                </p>
+
+                <p class="dato">
+                    Punto:
+                    <span class="valor punto">0</span>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const dado1 = document.querySelector(".dado1");
+        const dado2 = document.querySelector(".dado2");
+
+        const btnLanzar = document.querySelector(".lanzar");
+        const btnAgain = document.querySelector(".again");
+
+        const suma = document.querySelector(".suma");
+        const puntoTexto = document.querySelector(".punto");
+        const mensaje = document.querySelector(".mensaje");
+
+        let punto = 0;
+        let primerTiro = true;
+
+        function lanzarDados() {
+
+            let numero1 = Math.floor(Math.random() * 6) + 1;
+            let numero2 = Math.floor(Math.random() * 6) + 1;
+            let total = numero1 + numero2;
+
+            dado1.textContent = numero1;
+            dado2.textContent = numero2;
+            suma.textContent = total;
+
+            if (primerTiro) {
+
+                if (total === 7 || total === 11) {
+                    mensaje.textContent = "Ganaste";
+                    btnLanzar.disabled = true;
+                }
+                else if (total === 2 || total === 3 || total === 12) {
+                    mensaje.textContent = "Perdiste";
+                    btnLanzar.disabled = true;
+                }
+                else {
+                    punto = total;
+                    puntoTexto.textContent = punto;
+                    primerTiro = false;
+                }
+
+            }
+            else {
+                if (total === punto) {
+                    mensaje.textContent = "Ganaste";
+                    btnLanzar.disabled = true;
+                }
+                else if (total === 7) {
+                    mensaje.textContent = "Perdiste";
+                    btnLanzar.disabled = true;
+                }
+            }
+        }
+
+        function nuevaPartida() {
+
+            dado1.textContent = "?";
+            dado2.textContent = "?";
+
+            suma.textContent = "0";
+            puntoTexto.textContent = "0";
+
+            punto = 0;
+            primerTiro = true;
+
+            mensaje.textContent = "Juego iniciado";
+
+            btnLanzar.disabled = false;
+        }
+
+        btnLanzar.addEventListener("click", lanzarDados);
+        btnAgain.addEventListener("click", nuevaPartida);
+
+    </script>
+
+</body>
+
+</html>

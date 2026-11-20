@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Ejericio 9 Control de gastos</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+
+        .contenedor {
+            background: white;
+            padding: 20px;
+            max-width: 400px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgb(143, 0, 195);
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px;
+            width: 100%;
+            background: #740070;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            background: #eee;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+
+        .total {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contenedor">
+        <h2>Control de Gastos</h1>
+        <h3>Filtrar Lista</h2>
+        <input type="text" id="Filtrartxt" placeholder="Filtrar">
+        <h2>Añadir nuevo gasto</h2>
+
+        <input type="text" id="nombreGasto" placeholder="Ej. Comida">
+        <input type="number" id="cantidadGasto" placeholder="Ej. 150">
+
+        <button id="btnAgregar">Añadir Gasto</button>
+
+        <ul id="listaGastos"></ul>
+
+        <p class="total">Total: $<span id="totalGastado">0</span></p>
+    </div>
+
+    <script>
+        const inputNombre = document.getElementById("nombreGasto");
+        const inputCant = document.getElementById("cantidadGasto");
+        const btnAgregar = document.getElementById("btnAgregar");
+        const ul = document.getElementById("listaGastos");
+        const total = document.getElementById("totalGastado");
+        const gastos = [];
+        const filter = document.getElementById("filter")
+
+
+        function borrarGasto(indice)
+        {
+            gastos.splice(indice, 1);
+            dibujarPantalla();
+        }
+
+        function mostrarFiltro(texto)
+        {
+            if(texto != "")
+            {
+                ul.innerHTML = null;
+                gastos.filter(x => x.nombre.toLowerCase().includes(texto.toLowerCase())).forEach((x, i) => 
+                {
+                    let li = document.createElement("li");
+                    li.innerHTML = `<span>${x.nombre} - $${x.cantidad}</span>`;
+                    ul.appendChild(li);
+                })
+                total.textContent = gastos.reduce((t, x) => 
+                {
+                    return t + x.cantidad;
+                }, 0)
+            }
+            else
+                dibujarPantalla();
+        }
+
+        function dibujarPantalla()
+        {
+            //limpiarpantalla
+            ul.innerHTML = null;
+            gastos.forEach((x, i) => 
+            {
+                let li = document.createElement("li");
+                li.innerHTML = `<span>${x.nombre} - $${x.cantidad}</span> <button onclick ="borrarGasto(${i})" style="width: 30px;
+                border-radius: 2em; background: red; cursor: pointer; color: white; height: 30px">X</button>`;
+                ul.appendChild(li);
+            })
+            total.textContent = gastos.reduce((t, x) => 
+            {
+                return t + x.cantidad;
+            }, 0)
+        }
+
+        btnAgregar.addEventListener("click", () => 
+        {
+            let nombre = inputNombre.value;
+            let cantidad = parseInt(inputCant.value);
+
+            if(nombre == null || isNaN(cantidad))
+            {
+                alert("Datos inválidos.");
+                return;
+            }
+
+            if(cantidad < 0)
+            {
+                alert("Datos inválidos.");
+                return;
+            }
+
+            gastos.push({'nombre': nombre, 'cantidad': cantidad});
+
+            dibujarPantalla();
+
+            inputNombre.value = "";
+            inputCant.value = "";
+            inputNombre.focus();
+            filter.value = "";
+        })
+
+        filter.addEventListener("input", () => 
+        {
+            mostrarFiltro(filter.value);
+        })
+    </script>
+</body>
+
+</html>

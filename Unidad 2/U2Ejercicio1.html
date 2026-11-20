@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+            align-items: center;
+            padding: 10px;
+            gap: 10px;
+            margin: auto 150px auto 150px;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, .6),
+                -2px -2px 3px rgba(0, 0, 0, .2);
+        }
+
+        input[type="number"] {
+            appearance: textfield;
+        }
+
+        #btnSumar {
+            grid-column: 1/3;
+            margin: auto;
+            width: 110px;
+            border: 1px solid #000;
+            border-radius: 0;
+            padding: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Ejercicio 1. Suma de dos numeros</h1>
+
+    <form>
+        <label for="num1">Número 1: </label><input type="number" id="idNumero1" />
+        <label for="num2">Número 2: </label><input type="number" id="idNumero2" />
+        <input type="button" id="btnSumar" value="Sumar" />
+        <label for="res">Resultado:</label><input type="number" readonly id="res" />
+    </form>
+
+    <script>
+        const btnSumar = document.getElementById("btnSumar");
+        const num1 = document.getElementById("idNumero1");
+        const num2 = document.getElementById("idNumero2");
+        const res = document.getElementById("res");
+
+        num1.value = 0;
+        num2.value = 0;
+
+        btnSumar.addEventListener("click", () => {
+            res.value = parseFloat(num1.value) + parseFloat(num2.value);
+        });
+    </script>
+</body> 
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ejercicio 1. Conociendo a DOM</title>
+    </head>
+    <body>
+        <h1>Ejercicio 1. Conociendo a DOM</h1>
+        <form>
+            <label id="idDatos">Datos:</label> <br>
+            <input type="text" value="Contenido" id="idContenido">
+            <input type="button" value="Boton 1" id="idBtn1">
+            <input type="button" value="Boton 2" id="idBtn2">
+        </form>
+
+        <script>
+            //Variables de objeto
+            let contenido = document.getElementById("idContenido");
+            let boton1 = document.getElementById("idBtn1");
+
+            function cambiarContenido(){
+                contenido.value = 'Has presionado el boton';
+            };
+
+            const cambiarColor =() =>{
+                this.value ='BOTON1';
+                contenido.style.color = 'blue';
+            }
+            contenido.value = 'Datos del formulario';
+            contenido.style.color = 'purple';
+            //metodo anonimo - por que no tiene nombre
+
+            // boton1.addEventListener('click', function(){
+            //     contenido.value = 'Has presionado el boton';
+            // });
+
+            //metodo anonimo pero con el operador flecha
+            //cons nf = () => {
+
+            boton1.addEventListener('click', ()=>{
+            contenido.value = 'Has presionado el boton';
+
+            //NO TIENE ACCESO A CAMBIAR LAS PROPIEDADES DEL OBJETO actual por ser un metodo anonimo
+            this.value ='BOTON1';
+            });
+
+            // boton1.addEventListener('click',cambiarContenido);
+            // boton1.addEventListener('click',cambiarColor);
+
+            //un ejercicio para capturar 2 numeros y hacer la suma de ellos (1 form 
+            // 2 label 1 boton otro label, al dar click da la suma y 
+            // cuidado de las cajas de texto convertir a numero diferente de snap)
+            
+            //tabla de multiplicar (css y html nos lo daran)
+        </script>
+    </body>
+</html>

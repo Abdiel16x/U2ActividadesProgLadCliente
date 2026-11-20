@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body,
+        html {
+            width: 100%;
+            font-family: Arial;
+            margin: 0;
+            padding: 0;
+            background-color: gainsboro;
+        }
+
+        h1 {
+            background-color: darkorange;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            justify-items: start;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+        }
+
+        form label {
+            justify-self: end;
+        }
+
+        form select {
+            padding: 5px 20px;
+            font-size: 1.5rem;
+        }
+
+        ul {
+            list-style: none;
+            grid-column: span 2;
+            background: white;
+            padding: 10px;
+            margin: 20px;
+            justify-self: stretch;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>Ejercicio 2. Tablas de multiplicar.</h1>
+    <form><label>Seleccione la tabla:</label><select id="idForm"></select>
+        <ul class="tabla"></ul>
+    </form>
+
+    <script>
+        const selector = document.querySelector("form select");
+        const tabla = document.querySelector(".tabla");
+
+        for (let i = 1; i <= 10; i++) {
+            const op = document.createElement("option");
+            op.value = i;
+            op.textContent = i;
+            selector.append(op);
+        }
+
+        function generarTabla() {
+            const numeroTabla = selector.value;
+            tabla.replaceChildren();
+
+            for (let i = 1; i <= 10; i++) {
+                const li = document.createElement("li");
+                let Resultado = numeroTabla * i;
+                li.textContent = `${numeroTabla} x ${i} = ${Resultado} ` ;
+                tabla.append(li);
+            }
+
+        }
+
+        generarTabla();
+        selector.addEventListener("change", () => {
+            generarTabla();
+        });
+    </script>
+</body>
+
+</html>

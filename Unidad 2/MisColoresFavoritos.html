@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Paleta de colores</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f0f2f5;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            color: #1a1a2e;
+        }
+
+        h2 {
+            margin: 1.5rem 0 0.75rem;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .controles {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        input[type="color"] {
+            width: 50px;
+            height: 42px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            background: white;
+            padding: 2px;
+        }
+
+        button {
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            background: #4a6cf7;
+            color: white;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #3451c9;
+        }
+
+        #error {
+            color: #d32f2f;
+            font-size: 0.9rem;
+            min-height: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #contadores {
+            font-weight: bold;
+            color: #1a1a2e;
+            margin-bottom: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1rem;
+            min-height: 40px;
+        }
+
+        .tarjeta {
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            transition: transform 0.15s;
+        }
+
+        .tarjeta:hover {
+            transform: scale(1.03);
+        }
+
+        .tarjeta.favorito {
+            border: 3px solid #f7b731;
+            box-shadow: 0 0 14px rgba(247, 183, 49, 0.7);
+        }
+
+        .tarjeta h3 {
+            font-size: 1rem;
+            word-break: break-word;
+        }
+
+        .tarjeta button {
+            background: rgba(0, 0, 0, 0.4);
+            font-size: 0.85rem;
+            padding: 0.4rem;
+        }
+
+        .tarjeta button:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .vacio {
+            color: #888;
+            font-style: italic;
+            font-size: 0.9rem;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Paleta de Colores</h1>
+
+    <div class="controles">
+        <input type="color" id="color-picker" value="red">
+        <input type="text" id="nombre-color" placeholder="Nombre del color" autocomplete="off">
+        <button id="btn-agregar">Agregar color</button>
+    </div>
+
+    <p id="error"></p>
+    <p id="contadores">Colores: 0 | Favoritos: 0</p>
+
+    <h2>Lista de colores </h2>
+    <div id="paleta" class="grid"></div>
+
+    <h2>Mis colores favoritos</h2>
+    <div id="favoritos" class="grid"></div>
+    <script>
+        // Declara el arreglo para representar de cada color: el nombre, el código en hexadecimal y si es favorito (true o false), por default es false
+        let colores = [];
+
+        // Busca los objetos a utilizar del HTML
+        const colorPicker = document.getElementById("color-picker");
+        const nombreColor = document.getElementById("nombre-color");
+        const btnAgregar = document.getElementById("btn-agregar");
+
+        const errorColor = document.getElementById("error");
+        const contadoresColor = document.getElementById("contadores");
+
+        const paletaColores = document.getElementById("paleta");
+        const coloresFavoritos = document.getElementById("favoritos");
+
+        btnAgregar.addEventListener("click", function () {
+
+            let color = colorPicker.value;
+            let nombre = nombreColor.value;
+
+            if (nombre === "") {
+                errorColor.textContent = "Escribe el nombre del color";
+            }
+            else {
+                errorColor.textContent = "";
+
+                let nuevoColor = {
+                    nombre: nombre,
+                    color: color,
+                    favorito: false
+                };
+
+                colores.push(nuevoColor);
+                crearTarjeta(nuevoColor);
+                nombreColor.value = "";
+
+                actualizarContadores();
+            }
+        });
+
+        function crearTarjeta(color) {
+            let tarjeta = document.createElement("div");
+            let nombreCol = document.createElement("h3");
+            let btnFavorito = document.createElement("button");
+
+            tarjeta.style.backgroundColor = color.color;
+
+            let i = colores.length;
+            colores[i] = color;
+
+            tarjeta.classList.add("tarjeta");
+
+            nombreCol.textContent = color.nombre;
+            btnFavorito.textContent = color.favorito ? "Quitar Favorito" : "Agregar Favorito";
+
+            if (color.favorito === true) {
+                tarjeta.classList.add("favorito");
+                coloresFavoritos.append(tarjeta);
+            }
+            else {
+                paletaColores.append(tarjeta);
+            }
+
+            tarjeta.append(nombreCol);
+            tarjeta.append(btnFavorito);
+
+            btnFavorito.addEventListener("click", function () {
+                if (color.favorito === false) {
+                    color.favorito = true;
+                }
+                else {
+                    color.favorito = false;
+                }
+
+                tarjeta.remove();
+                crearTarjeta(color);
+                actualizarContadores();
+            });
+        }
+
+        function actualizarContadores() {
+            let totalFavoritos = 0;
+
+            for (let i = 0; i < colores.length; i++) {
+                if (colores[i].favorito === true) {
+                    totalFavoritos++;
+                }
+            }
+
+            contadoresColor.textContent = "Colores: " + colores.length + " | Favoritos: " + totalFavoritos;
+        }
+    </script>
+</body>
+
+</html>
